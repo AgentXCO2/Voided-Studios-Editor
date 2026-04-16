@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Void Studios</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<a href="/login" id="loginBtn">Login with GitHub</a>
+
+<div id="app" class="hidden">
+
+  <div id="top">
+    <h2>VOID STUDIOS</h2>
+    <button onclick="loadRepos()">Refresh</button>
+  </div>
+
+  <div id="layout">
+
+    <div id="sidebar">
+      <h3>FILES</h3>
+      <div id="tree"></div>
+    </div>
+
+    <div id="main">
+      <h3 id="fileName">No file selected</h3>
+
+      <textarea id="editor"></textarea>
+
+      <button onclick="saveFile()">Save to GitHub</button>
+    </div>
+
+  </div>
+
+  <div id="repos"></div>
+
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
