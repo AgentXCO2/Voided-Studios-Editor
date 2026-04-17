@@ -67,9 +67,7 @@ async function loadTree(owner, repo) {
       const div = document.createElement("div");
       div.className = "item";
       div.innerText = f.path;
-
       div.onclick = () => openFile(f.path);
-
       tree.appendChild(div);
     }
   });
@@ -77,10 +75,9 @@ async function loadTree(owner, repo) {
   renderView();
 }
 
-/* ---------------- OPEN FILE (TABS) ---------------- */
+/* ---------------- FILE OPEN (TABS) ---------------- */
 async function openFile(path) {
   let existing = openTabs.find(t => t.path === path);
-
   if (existing) return setActiveTab(path);
 
   const res = await fetch(
@@ -168,8 +165,7 @@ async function saveFile() {
   const msg = document.getElementById("commitMsg").value;
   const tab = openTabs.find(t => t.path === activeTab);
 
-  if (!tab) return;
-  if (!msg) return alert("Commit message required");
+  if (!tab || !msg) return;
 
   await fetch("/api/update", {
     method: "POST",
@@ -259,7 +255,7 @@ async function createFile() {
   loadTree(currentRepo.owner, currentRepo.repo);
 }
 
-/* ---------------- VIEW SYSTEM ---------------- */
+/* ---------------- NAV SYSTEM ---------------- */
 function setView(view, event) {
   currentView = view;
 
@@ -272,10 +268,12 @@ function setView(view, event) {
   renderView();
 }
 
-function renderView() {
+/* ---------------- PHASE 5 REAL CONTENT VIEWS ---------------- */
+async function renderView() {
   const tree = document.getElementById("tree");
   const editor = document.getElementById("editorPanel");
 
+  // CODE VIEW (IDE)
   if (currentView === "code") {
     tree.style.display = "block";
     editor.style.display = "flex";
@@ -285,17 +283,53 @@ function renderView() {
   tree.style.display = "none";
   editor.style.display = "flex";
 
-  const msgMap = {
-    issues: "Issues coming soon 🧠",
-    pulls: "Pull Requests coming soon 🔥",
-    actions: "Actions / Deploy logs coming soon ⚙️",
-    projects: "Projects coming soon 📊",
-    wiki: "Wiki coming soon 📘",
-    security: "Security coming soon 🛡",
-    insights: "Insights coming soon 📈",
-    settings: "Settings coming soon ⚙️"
-  };
+  /* ---------------- ISSUES ---------------- */
+  if (currentView === "issues") {
+    const res = await fetch(
+      `https://api.github.com/repos/${currentRepo.owner}/${currentRepo.repo}/issues`,
+      { headers: { Authorization: token } }
+    );
 
+    const issues = await res.json();
+
+    document.getElementById("editor").value =
+      issues.length
+        ? issues.map(i => `#${i.number} ${i.title}`).join("\n")
+        : "No issues found";
+    return;
+  }
+
+  /* ---------------- PULL REQUESTS ---------------- */
+  if (currentView === "pulls") {
+    const res = await fetch(
+      `https://api.github.com/repos/${currentRepo.owner}/${currentRepo.repo}/pulls`,
+      { headers: { Authorization: token } }
+    );
+
+    const pulls = await res.json();
+
+    document.getElementById("editor").value =
+      pulls.length
+        ? pulls.map(p => `PR #${p.number} ${p.title}`).join("\n")
+        : "No pull requests";
+    return;
+  }
+
+  /* ---------------- ACTIONS (SIMULATED) ---------------- */
+  if (currentView === "actions") {
+    document.getElementById("editor").value =
+      "Recent activity:\n- Repo opened\n- File edits committed\n- Tabs system active\n- Void pipeline running";
+    return;
+  }
+
+  /* ---------------- SETTINGS ---------------- */
+  if (currentView === "settings") {
+    document.getElementById("editor").value =
+      `Repo Settings:\n- Owner: ${currentRepo.owner}\n- Repo: ${currentRepo.repo}\n- Mode: Void Studios IDE\n- Branch: main`;
+    return;
+  }
+
+  /* ---------------- DEFAULT ---------------- */
   document.getElementById("editor").value =
-    msgMap[currentView] || "Coming soon";
+    `${currentView} coming soon`;
 }
