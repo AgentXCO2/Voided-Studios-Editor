@@ -97,7 +97,7 @@ app.get("/api/file", async (req, res) => {
   });
 });
 
-// ---------------- SAVE / CREATE FILE ----------------
+// ---------------- CREATE / UPDATE FILE ----------------
 app.post("/api/update", async (req, res) => {
   const { token, owner, repo, path, message, content, sha } = req.body;
 
@@ -123,7 +123,7 @@ app.post("/api/update", async (req, res) => {
   res.json(await r.json());
 });
 
-// ---------------- DELETE ----------------
+// ---------------- DELETE FILE ----------------
 app.delete("/api/delete", async (req, res) => {
   const { token, owner, repo, path, sha } = req.body;
 
@@ -145,7 +145,7 @@ app.delete("/api/delete", async (req, res) => {
   res.json(await r.json());
 });
 
-// ---------------- RENAME ----------------
+// ---------------- RENAME FILE ----------------
 app.post("/api/rename", async (req, res) => {
   const { token, owner, repo, oldPath, newPath, content, sha } = req.body;
 
