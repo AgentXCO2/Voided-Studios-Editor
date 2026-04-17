@@ -7,27 +7,34 @@
 
 <body>
 
-<a id="loginBtn" href="/login">LOGIN WITH GITHUB</a>
+<div id="layout">
 
-<div id="app" class="hidden">
+  <div id="sidebar">
+    <h2>🟣 VOID</h2>
 
-  <div id="top">
-    <h2>VOID STUDIOS</h2>
+    <button onclick="loadOrgs()">Load Orgs</button>
     <button onclick="loadRepos()">Load Repos</button>
+
+    <div id="orgList"></div>
+    <div id="repoList"></div>
   </div>
 
-  <div id="layout">
+  <div id="files">
+    <h3 id="repoTitle">Select Repo</h3>
+    <div id="tree"></div>
+  </div>
 
-    <div id="sidebar">
-      <h3>FILES</h3>
-      <div id="tree"></div>
-    </div>
+  <div id="editorPanel">
 
-    <div id="main">
-      <h3 id="fileName">No file selected</h3>
-      <textarea id="editor"></textarea>
+    <div id="bar">
+      <span id="fileName">No file</span>
+
+      <button onclick="renameFile()">Rename</button>
+      <button onclick="deleteFile()">Delete</button>
       <button onclick="saveFile()">Save</button>
     </div>
+
+    <textarea id="editor"></textarea>
 
   </div>
 
