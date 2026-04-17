@@ -71,7 +71,7 @@ async function loadTree(owner, repo) {
   });
 }
 
-// ---------------- FILE ----------------
+// ---------------- OPEN FILE ----------------
 async function openFile(path) {
   const res = await fetch(
     `/api/file?owner=${currentRepo.owner}&repo=${currentRepo.repo}&path=${path}&token=${token}`
@@ -85,8 +85,12 @@ async function openFile(path) {
   currentFile = { path, sha: data.sha };
 }
 
-// ---------------- SAVE ----------------
+// ---------------- COMMIT SAVE ----------------
 async function saveFile() {
+  const msg = document.getElementById("commitMsg").value;
+
+  if (!msg) return alert("Commit message required");
+
   await fetch("/api/update", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -95,13 +99,13 @@ async function saveFile() {
       owner: currentRepo.owner,
       repo: currentRepo.repo,
       path: currentFile.path,
-      message: "Void edit",
+      message: msg,
       content: document.getElementById("editor").value,
       sha: currentFile.sha
     })
   });
 
-  alert("Saved 🔥");
+  alert("Committed 🔥");
 }
 
 // ---------------- DELETE ----------------
@@ -121,10 +125,11 @@ async function deleteFile() {
   alert("Deleted");
 }
 
-// ---------------- INLINE RENAME ----------------
+// ---------------- SAFE INLINE RENAME ----------------
 async function renameFileInline() {
-  const newPath = prompt("New name?");
-  const content = document.getElementById("editor").value;
+  const newPath = prompt("New file name:");
+
+  if (!newPath || newPath === currentFile.path) return;
 
   await fetch("/api/rename", {
     method: "POST",
@@ -135,24 +140,35 @@ async function renameFileInline() {
       repo: currentRepo.repo,
       oldPath: currentFile.path,
       newPath,
-      content,
+      content: document.getElementById("editor").value,
       sha: currentFile.sha
     })
   });
 
-  alert("Renamed 🔥");
+  loadTree(currentRepo.owner, currentRepo.repo);
 }
 
-// ---------------- DEPLOY PANEL ----------------
-function openDeployPanel() {
-  const choice = prompt(
-`Render Deploy Options:
-1 - Redeploy
-2 - Clear build cache & deploy
-3 - Open dashboard`
-  );
+// ---------------- CREATE FILE ----------------
+async function createFile() {
+  const path = prompt("File name:");
+  if (!path) return;
 
-  if (choice === "1" || choice === "2" || choice === "3") {
-    window.open("https://dashboard.render.com", "_blank");
-  }
+  const msg = prompt("Commit message:");
+  if (!msg) return;
+
+  await fetch("/api/update", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      token,
+      owner: currentRepo.owner,
+      repo: currentRepo.repo,
+      path,
+      message: msg,
+      content: "",
+      sha: null
+    })
+  });
+
+  loadTree(currentRepo.owner, currentRepo.repo);
 }
