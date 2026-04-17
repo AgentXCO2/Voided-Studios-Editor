@@ -1,30 +1,30 @@
 let token = null;
-let currentFile = null;
 let currentRepo = null;
+let currentFile = null;
 
-// GET TOKEN FROM URL
 const params = new URLSearchParams(window.location.search);
+
 if (params.get("token")) {
   token = params.get("token");
   localStorage.setItem("token", token);
+
   document.getElementById("loginBtn").style.display = "none";
   document.getElementById("app").classList.remove("hidden");
 }
 
 token = token || localStorage.getItem("token");
 
-// ------------------ LOAD REPOS ------------------
+// 🟣 LOAD REPOS
 async function loadRepos() {
   const res = await fetch("/api/repos", {
     headers: { Authorization: token }
   });
 
   const data = await res.json();
-
   console.log(data);
 }
 
-// ------------------ LOAD TREE ------------------
+// 🟣 LOAD FILE TREE
 async function loadTree(owner, repo) {
   currentRepo = { owner, repo };
 
@@ -37,22 +37,20 @@ async function loadTree(owner, repo) {
   const tree = document.getElementById("tree");
   tree.innerHTML = "";
 
-  data.tree.forEach(file => {
-    if (file.type === "blob") {
+  data.tree.forEach(f => {
+    if (f.type === "blob") {
       const div = document.createElement("div");
-      div.innerText = file.path;
+      div.innerText = f.path;
 
-      div.onclick = () => openFile(file.path);
+      div.onclick = () => openFile(f.path);
 
       tree.appendChild(div);
     }
   });
 }
 
-// ------------------ OPEN FILE ------------------
+// 🟣 OPEN FILE
 async function openFile(path) {
-  currentFile = path;
-
   const res = await fetch(
     `/api/file?owner=${currentRepo.owner}&repo=${currentRepo.repo}&path=${path}&token=${token}`
   );
@@ -65,7 +63,7 @@ async function openFile(path) {
   currentFile = { path, sha: data.sha };
 }
 
-// ------------------ SAVE FILE ------------------
+// 🟣 SAVE FILE
 async function saveFile() {
   await fetch("/api/update", {
     method: "POST",
@@ -81,5 +79,5 @@ async function saveFile() {
     })
   });
 
-  alert("Saved to GitHub 🔥");
+  alert("Saved 🔥");
 }
