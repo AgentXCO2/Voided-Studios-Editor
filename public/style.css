@@ -20,9 +20,8 @@ body {
 #files {
   width: 280px;
   background: #0d0b14;
-  border-right: 1px solid #3c096c;
   padding: 10px;
-  overflow-y: auto;
+  border-right: 1px solid #3c096c;
 }
 
 #editorPanel {
@@ -43,7 +42,6 @@ textarea {
   background: black;
   color: #80ffdb;
   border: none;
-  outline: none;
   padding: 10px;
   font-family: monospace;
 }
