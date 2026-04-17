@@ -12,16 +12,16 @@
   <div id="sidebar">
     <h2>🟣 VOID STUDIOS</h2>
 
-    <button onclick="loadOrgs()">Load Orgs</button>
-    <button onclick="loadRepos()">Load Repos</button>
-    <button onclick="openDeployPanel()">Deploy</button>
+    <button onclick="loadOrgs()">Orgs</button>
+    <button onclick="loadRepos()">Repos</button>
+    <button onclick="createFile()">New File</button>
 
     <div id="orgList"></div>
     <div id="repoList"></div>
   </div>
 
   <div id="files">
-    <h3 id="repoTitle">Select Repo</h3>
+    <h3 id="repoTitle">Repo</h3>
     <div id="tree"></div>
   </div>
 
@@ -32,9 +32,10 @@
 
       <button onclick="renameFileInline()">Rename</button>
       <button onclick="deleteFile()">Delete</button>
-      <button onclick="saveFile()">Save</button>
+      <button onclick="saveFile()">Commit</button>
     </div>
 
+    <input id="commitMsg" placeholder="Commit message..." />
     <textarea id="editor"></textarea>
 
   </div>
