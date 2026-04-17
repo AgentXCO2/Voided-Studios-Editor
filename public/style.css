@@ -5,19 +5,18 @@ body {
   color: #c77dff;
 }
 
-/* LOGIN */
 #loginBtn {
   display: block;
-  margin: 100px auto;
+  margin: 120px auto;
+  width: 220px;
   text-align: center;
   padding: 12px;
   background: #5a189a;
   color: white;
-  width: 200px;
   text-decoration: none;
+  border-radius: 6px;
 }
 
-/* TOP BAR */
 #top {
   display: flex;
   justify-content: space-between;
@@ -25,13 +24,11 @@ body {
   background: #12002b;
 }
 
-/* LAYOUT */
 #layout {
   display: flex;
   height: 80vh;
 }
 
-/* SIDEBAR */
 #sidebar {
   width: 250px;
   background: #0a0a0f;
@@ -48,7 +45,6 @@ body {
   background: #12002b;
 }
 
-/* EDITOR */
 #main {
   flex: 1;
   padding: 10px;
@@ -60,5 +56,4 @@ textarea {
   background: black;
   color: #80ffdb;
   border: 1px solid #3c096c;
-  font-family: monospace;
 }
